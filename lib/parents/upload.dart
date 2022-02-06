@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as paths;
 
+
 class Upload extends StatefulWidget {
   @override
   _UploadState createState() => _UploadState();
@@ -57,29 +58,26 @@ class _UploadState extends State<Upload> {
   }
 
   Future<void> uploadImage() async {
-    String uploadurl = "url";
+    String uploadurl = "http://192.168.1.10:8000/predict";
     try {
-      List<int> imageBytes = _image!.readAsBytesSync();
+      final List<int> imageBytes = _image!.readAsBytesSync();
       String baseimage = base64Encode(imageBytes);
-      var response = await http.post(Uri.parse(uploadurl), body: {
+
+      http.Response response = await http.post(Uri.parse(uploadurl), body: {
         'image': baseimage,
       });
-      if (response.statusCode == 200) {
-        var jsondata = json.decode(response.body);
-        if (jsondata["error"]) {
-          //check error sent from server
-          print(jsondata["msg"]);
-          //if error return from server, show message from server
-        } else {
-          print("Upload successful");
-        }
+      if (response.statusCode.toInt() == 200) {
+        var jsondata = json.decode(response.body.toString());
+
+          print(jsondata);
+
       } else {
-        print("Error during connection to server");
+        print(response.statusCode);
         //there is error during connecting to server,
         //status code might be 404 = url not found
       }
     } catch (e) {
-      print("Error during converting to Base64");
+      print(e);
       //there is error during converting file image to base64 encoding.
     }
   }

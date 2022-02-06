@@ -125,7 +125,7 @@ class _RegistrationScreenState extends State<LoginScreen> {
                     _formKey.currentState!.save();
                   } else
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => play()));
+                        context, MaterialPageRoute(builder: (_) => AddChild()));
                 },
               ),
             ),
