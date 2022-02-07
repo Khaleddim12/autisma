@@ -1,3 +1,4 @@
+import 'package:autisma/children/faces.dart';
 import 'package:autisma/games/math/screens/game_screen.dart';
 import 'package:autisma/games/memory_game/screens/memory.dart';
 import 'package:autisma/parents/Add%20Games/Add%20Game.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         'add_games': (_) => Games(),
         'score': (_) => Score(),
         'upload': (_) => Upload(),
+        'faces': (_) => Face()
       },
     );
   }

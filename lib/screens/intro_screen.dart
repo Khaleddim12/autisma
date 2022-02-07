@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:autisma/widgets/RoundedButton.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class IntroScreen extends StatefulWidget {
   @override
@@ -28,47 +29,64 @@ class _IntroScreenState extends State<IntroScreen> {
     });
   }
 
-  test() async {
-    //test the autisic children and the value is put in result and send via shared
-    //preferences in the app's cache and accsessed in the add child page
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> pickImage() async {
+    var image = await imagePicker.pickImage(source: ImageSource.camera);
+    if (image == null) return;
     setState(() {
-      result = "Autistic";
+      _image = File(image.path);
     });
-    prefs.setString("result", result);
+    if (_image != null) {
+      uploadImage();
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                title: Text('Result:'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(result),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('Ok'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ));
+    }
   }
 
-  Future pickImage() async {
+  Future<void> uploadImage() async {
+    String uploadurl = "http://192.168.1.10:8000/predict";
     try {
-      final image = await imagePicker.pickImage(source: ImageSource.camera);
-      if (image == null) return;
-      setState(() {
-        _image = File(image.path);
+      final List<int> imageBytes = _image!.readAsBytesSync();
+      String baseimage = base64Encode(imageBytes);
+
+      http.Response response = await http.post(Uri.parse(uploadurl), body: {
+        'image': baseimage,
       });
-      if (_image != null) {
-        showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-                  title: Text('Result:'),
-                  content: SingleChildScrollView(
-                    child: ListBody(
-                      children: <Widget>[
-                        Text(result),
-                      ],
-                    ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('Ok'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ));
+      if (response.statusCode.toInt() == 200) {
+        var jsondata = json.decode(response.body.toString());
+        print(jsondata);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        setState(() {
+          result = jsondata;
+        });
+        prefs.setString("result", result);
+      } else {
+        print(response.statusCode);
+        print("else");
+        //there is error during connecting to server,
+        //status code might be 404 = url not found
       }
-    } on PlatformException catch (e) {
-      print("Failed To Pick image: $e");
+    } catch (e) {
+      print("$e catch");
+      print(e);
+      //there is error during converting file image to base64 encoding.
     }
   }
 
@@ -119,7 +137,6 @@ class _IntroScreenState extends State<IntroScreen> {
                     title: 'detection',
                     onpressed: () {
                       // Navigator.of(context).pushNamed('mathmetical');
-                      test();
                       pickImage();
                     },
                   ),
@@ -149,5 +166,3 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
 }
-
-class result extends ChangeNotifier {}

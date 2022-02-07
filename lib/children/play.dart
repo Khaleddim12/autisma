@@ -1,17 +1,19 @@
 import 'package:autisma/children/game_list.dart';
 import 'package:autisma/games/Game_module/Game_data.dart';
-import 'package:autisma/games/Game_module/game.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
-class play extends StatefulWidget {
-  const play({Key? key}) : super(key: key);
+class Play extends StatefulWidget {
+  const Play({Key? key}) : super(key: key);
 
   @override
-  _playState createState() => _playState();
+  _PlayState createState() => _PlayState();
 }
 
-class _playState extends State<play> {
+class _PlayState extends State<Play> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,17 +25,8 @@ class _playState extends State<play> {
       body: Column(
         children: <Widget>[
           Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0),
-                ),
-              ),
-              child: ChangeNotifierProvider(
-                  create: (_) => GameData(), child: Games()),
-            ),
+            child: ChangeNotifierProvider(
+                create: (_) => GameData(), child: Games()),
           ),
         ],
       ),
