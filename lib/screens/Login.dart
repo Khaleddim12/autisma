@@ -123,18 +123,9 @@ class _RegistrationScreenState extends State<LoginScreen> {
                   final isValid = _formKey.currentState!.validate();
                   if (!isValid) {
                     _formKey.currentState!.save();
-                  } else {
-                    /*
-                      if parent
-                      Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => AddChild()));
-                        if child
-                        Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => Play()));
-                     */
+                  } else
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => Play()));
-                  }
+                        context, MaterialPageRoute(builder: (_) => AddChild()));
                 },
               ),
             ),
