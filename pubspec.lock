@@ -204,7 +204,7 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
+
     version: "1.3.0"
   mime:
     dependency: "direct main"
@@ -213,9 +213,9 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-=======
+
     version: "1.7.0"
->>>>>>> 351813a10fe6383f00d2accdc2edd2e57a61aff5
+
   modal_progress_hud_nsn:
     dependency: "direct main"
     description:

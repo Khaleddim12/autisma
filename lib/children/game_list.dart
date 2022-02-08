@@ -97,14 +97,3 @@ class _GameState extends State<Games> {
     });
   }
 }
-
-FetchImageData() async {
-  final url =
-      "https://kaleidosblog.s3-eu-west-1.amazonaws.com/flutter_gallery/data.json";
-  var response = await http.get(Uri.parse(url));
-  if (response.statusCode == 200) {
-    return jsonDecode(response.body);
-  } else {
-    throw Exception('Failed to load');
-  }
-}
