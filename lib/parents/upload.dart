@@ -7,9 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
+
 import 'package:path/path.dart' as paths;
 
+bool ispressed = false;
 
 class Upload extends StatefulWidget {
   @override
@@ -43,7 +44,6 @@ class _UploadState extends State<Upload> {
   Future pickImage(ImageSource source) async {
     try {
       final image = await imagePicker.pickImage(source: source);
-      final appDir = await getApplicationDocumentsDirectory();
       String fileName = paths.basename(image!.path);
       print(fileName);
       if (image == null) return;
@@ -69,8 +69,7 @@ class _UploadState extends State<Upload> {
       if (response.statusCode.toInt() == 200) {
         var jsondata = json.decode(response.body.toString());
 
-          print(jsondata);
-
+        print(jsondata);
       } else {
         print(response.statusCode);
         //there is error during connecting to server,
@@ -164,13 +163,28 @@ class _UploadState extends State<Upload> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
                       children: [
-                        RecordButton(),
-                        PlayButton(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RecordButton(),
+                            PlayButton(),
+                          ],
+                        ),
                       ],
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ispressed
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              upload_audio(),
+                            ],
+                          )
+                        : Container()
                   ],
                 ),
               ),
@@ -217,7 +231,9 @@ class _UploadState extends State<Upload> {
       ),
       onPressed: () async {
         await player.togglePlayer(whenfinished: () => setState(() {}));
-        setState(() {});
+        setState(() {
+          ispressed = !ispressed;
+        });
       },
     );
   }
@@ -276,6 +292,43 @@ class _UploadState extends State<Upload> {
       ),
       onPressed: () {
         uploadImage();
+      },
+    );
+  }
+
+  ElevatedButton upload_audio() {
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size(120, 50),
+        primary: Colors.white,
+        onPrimary: Colors.black,
+      ),
+      icon: Icon(Icons.arrow_upward_rounded),
+      label: Text(
+        "Upload Audio",
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Result:'),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text("Voice Record is uploaded"),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ));
       },
     );
   }

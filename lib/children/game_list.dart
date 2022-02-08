@@ -1,9 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:autisma/games/Game_module/Game_data.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'game_tile.dart';
 
 class Games extends StatefulWidget {

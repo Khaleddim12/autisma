@@ -79,11 +79,32 @@ class _IntroScreenState extends State<IntroScreen> {
         prefs.setString("result", result);
       } else {
         print(response.statusCode);
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Error:'),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text('Error Connectiong To Server'),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Ok'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ));
         print("else");
         //there is error during connecting to server,
         //status code might be 404 = url not found
       }
     } catch (e) {
+      result = e.toString();
       print("$e catch");
       print(e);
       //there is error during converting file image to base64 encoding.

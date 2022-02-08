@@ -1,22 +1,21 @@
-import 'dart:io';
-
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
-final path = 'audio_example.aac';
+int counter = 0;
+String audio_path = 'audio_example$counter.aac';
 
 class SoundRecorder {
   FlutterSoundRecorder? _recorder;
   bool _isRecorderInitialized = false;
   bool get isRecording => _recorder!.isRecording;
   Future _record() async {
-    Directory dir = await getApplicationDocumentsDirectory();
-    String filepath = dir.path + '.aac';
     if (!_isRecorderInitialized) return;
-    await _recorder!.startRecorder(toFile: path);
-    print(path);
+    counter++;
+    audio_path = 'audio_example$counter.aac';
+
+    await _recorder!.startRecorder(toFile: audio_path);
+    print(audio_path);
   }
 
   Future _stop() async {

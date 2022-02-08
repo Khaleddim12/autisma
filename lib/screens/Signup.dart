@@ -146,6 +146,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 color: Colors.blueAccent,
                 onpressed: () {
                   final isValid = _formKey.currentState!.validate();
+                  if (!isValid)
+                    _formKey.currentState!.save();
+                  else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("User Registered"),
+                    ));
+                    Navigator.popAndPushNamed(context, 'login');
+                  }
                 },
               ),
             ),

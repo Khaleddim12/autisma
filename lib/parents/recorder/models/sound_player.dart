@@ -1,7 +1,6 @@
+import 'package:autisma/parents/recorder/models/sound_recorder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
-
-final path = "audio_example.aac";
 
 class SoundPlayer {
   FlutterSoundPlayer? _player;
@@ -17,7 +16,9 @@ class SoundPlayer {
   }
 
   Future _play(VoidCallback whenfinished) async {
+    final path = "audio_example$counter.aac";
     await _player!.startPlayer(fromURI: path, whenFinished: whenfinished);
+    print(path + "khaled");
   }
 
   Future _stop() async {
