@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -61,7 +62,9 @@ class _FaceState extends State<Face> {
                                       color: Colors.black,
                                     ),
                                     label: Text('play sound'),
-                                    onPressed: () {}),
+                                    onPressed: () {
+                                      playSound();
+                                    }),
                               ),
                             ],
                           ),
@@ -96,4 +99,9 @@ FetchImageData() async {
   } else {
     throw Exception('Failed to load');
   }
+}
+
+void playSound() {
+  final player = AudioCache();
+  player.play('example.wav');
 }
